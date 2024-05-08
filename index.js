@@ -159,16 +159,26 @@ app.post('/battles/:fighter1_id/:fighter2_id', async (req, res) => {
             return res.status(404).send('Lutador não encontrado');
         }
 
-        const fighter1 = fighter1Response.rows;
-        const fighter2 = fighter2Response.rows;
+        const fighter1 = fighter1Response.rows[0];
+        const fighter2 = fighter2Response.rows[0];
 
-        let winnerId;
-        if (fighter1.level > fighter2.level) {
+        let hp_fighter1 = fighter1.hp;
+        let hp_fighter2 = fighter2.hp;
+        let power_fighter1 = fighter1.level;
+        let power_fighter2 = fighter2.level;
+
+        let winnerId = '';
+
+        // Verificação de empate
+        if (hp_fighter1 === hp_fighter2 && power_fighter1 === power_fighter2) {
+            return res.status(200).send('Empate');
+        }
+
+        // Verificação de vencedor
+        if (hp_fighter1 > hp_fighter2 || power_fighter1 > power_fighter2) {
             winnerId = fighter1_id;
-        } else if (fighter1.level < fighter2.level) {
+        } else if (hp_fighter2 > hp_fighter1 || power_fighter2 > power_fighter1) {
             winnerId = fighter2_id;
-        } else {
-            winnerId = Math.random() < 0.5 ? fighter1_id : fighter2_id;
         }
 
         const battleResult = await pool.query('INSERT INTO battles (fighter1_id, fighter2_id, winner_id) VALUES ($1, $2, $3)', [fighter1_id, fighter2_id, winnerId]);
@@ -183,6 +193,8 @@ app.post('/battles/:fighter1_id/:fighter2_id', async (req, res) => {
         res.status(500).send('Erro ao realizar a batalha!');
     }
 })
+
+
 
 
 // Servidor rodando
