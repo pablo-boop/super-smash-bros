@@ -19,7 +19,7 @@ app.get('/fighter', async (req, res) => {
     try {
         const { name } = req.query;
         if (name) {
-            const response = await pool.query('SELECT * FROM fighter WHERE name = $1', [name]);
+            const response = await pool.query('SELECT * FROM fighters WHERE name = $1', [name]);
             res.status(200).send({
                 message: `Fighter ${name} encontrado com sucesso!`,
                 fighter: response.rows
