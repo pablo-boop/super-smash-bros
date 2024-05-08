@@ -58,3 +58,11 @@ Certifique-se de ter o Node.js e o PostgreSQL instalados em sua máquina.
     npm install
     npm run dev
 ```
+
+## Contribuição
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou enviar um pull request.
+
+## Licença
+
+The project is licensed under the [MIT](https://opensource.org/license/mit)
