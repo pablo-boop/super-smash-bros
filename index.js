@@ -159,8 +159,8 @@ app.post('/battles/:fighter1_id/:fighter2_id', async (req, res) => {
             return res.status(404).send('Lutador não encontrado');
         }
 
-        const fighter1 = fighter1Response.rows[0];
-        const fighter2 = fighter2Response.rows[0];
+        const fighter1 = fighter1Response.rows;
+        const fighter2 = fighter2Response.rows;
 
         let winnerId;
         if (fighter1.level > fighter2.level) {
@@ -174,8 +174,9 @@ app.post('/battles/:fighter1_id/:fighter2_id', async (req, res) => {
         const battleResult = await pool.query('INSERT INTO battles (fighter1_id, fighter2_id, winner_id) VALUES ($1, $2, $3)', [fighter1_id, fighter2_id, winnerId]);
 
         res.status(200).send({
-            winner_id: winnerId,
-            battle: battleResult.rows[0]
+            winner: winnerId,
+            fighter1: fighter1,
+            fighter2: fighter2,
         });
     } catch (error) {
         console.error('Erro ao realizar a batalha!', error);
